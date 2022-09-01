@@ -25,12 +25,50 @@ namespace KimScor.StatSystem
 
             _StatSystem.OnAddedStat += StatSystem_OnAddedStat;
         }
+        private void OnDisable()
+        {
+#if UNITY_EDITOR
+            if (!gameObject.scene.isLoaded) return;
+#endif
+            _StatSystem.OnAddedStat -= StatSystem_OnAddedStat;
+        }
+
+        public void SetStatSystem(StatSystem statSystem)
+        {
+            if (_StatSystem != null)
+            {
+                _StatSystem.OnAddedStat -= StatSystem_OnAddedStat;
+            }
+
+            _StatSystem = statSystem;
+
+            if (_StatSystem != null)
+            {
+                _StatSystem.OnAddedStat += StatSystem_OnAddedStat;
+            }
+
+            UpdateStatBlock();
+        }
 
         private void StatSystem_OnAddedStat(StatSystem statSystem, Stat stat = null)
         {
+            UpdateStatBlock();
+        }
+        public void UpdateStatBlock()
+        {
+            if (_StatSystem == null)
+            {
+                foreach (var block in _Blocks)
+                {
+                    block.gameObject.SetActive(false);
+                }
+
+                return;
+            }
+
             int count = 0;
 
-            IReadOnlyDictionary<StatTag, Stat> container = statSystem.Stats;
+            IReadOnlyDictionary<StatTag, Stat> container = _StatSystem.Stats;
 
             if (container.Count == 0)
                 return;
@@ -62,10 +100,6 @@ namespace KimScor.StatSystem
                 _Blocks[i].gameObject.SetActive(false);
             }
         }
-
-        private void OnDisable()
-        {
-            _StatSystem.OnAddedStat -= StatSystem_OnAddedStat;
-        }
+       
     }
 }
