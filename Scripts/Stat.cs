@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 
 namespace KimScor.StatSystem
 {
-
 	[System.Serializable]
 	public class Stat : ISerializationCallbackReceiver
 	{

@@ -13,7 +13,7 @@ namespace KimScor.StatSystem
         public float Value;
     }
 
-    [CreateAssetMenu(fileName = "new Character Stats", menuName = "GAS/Stat/CharacterStat")]
+    [CreateAssetMenu(fileName = "InitializationStats_", menuName = "Stat/Initialization")]
 	public class InitializationStats : ScriptableObject
     {
         [Header("[Stat]")]

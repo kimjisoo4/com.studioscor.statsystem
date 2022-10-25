@@ -11,7 +11,7 @@ namespace KimScor.StatSystem
         #endregion
         
         [SerializeField] private InitializationStats[] _initializationStats;
-        private bool _HasSetting = false;
+        private bool _WasSetting = false;
 
         private Dictionary<StatTag, Stat> _Stats = new Dictionary<StatTag, Stat>();
 
@@ -19,7 +19,7 @@ namespace KimScor.StatSystem
         {
             get
             {
-                if (!_HasSetting)
+                if (!_WasSetting)
                     SetupStatSystem();
 
                 return _Stats;
@@ -31,13 +31,13 @@ namespace KimScor.StatSystem
 
         private void Awake()
         {
-            if (!_HasSetting)
+            if (!_WasSetting)
                 SetupStatSystem();
         }
 
-        private void SetupStatSystem()
+        protected virtual void SetupStatSystem()
         {
-            _HasSetting = true;
+            _WasSetting = true;
 
             _Stats = new Dictionary<StatTag, Stat>();
 
@@ -100,6 +100,30 @@ namespace KimScor.StatSystem
 
             return null;
         }
+        public Stat SetOrCreateValue(StatTag tag, float value = 0f)
+        {
+            if (!tag)
+            {
+                return null;
+            }
+
+            if (Stats.TryGetValue(tag, out Stat stat))
+            {
+                stat.SetBaseValue(value);
+
+                return stat;
+            }
+            else
+            {
+                stat = new Stat(tag, value);
+
+                _Stats.Add(tag, stat);
+
+                OnAddStat(stat);
+
+                return stat;
+            }
+        }
         public Stat GetOrCreateValue(StatTag Tag, float Value = 0f)
         {
             if (!Tag)
@@ -146,7 +170,7 @@ namespace KimScor.StatSystem
         }
 
         #region CallBack
-        public void OnAddStat(Stat stat)
+        protected void OnAddStat(Stat stat)
         {
             OnAddedStat?.Invoke(this, stat);
         }

@@ -4,7 +4,7 @@
 
 namespace KimScor.StatSystem
 {
-    [CreateAssetMenu(fileName ="new Stat", menuName = "GAS/Stat/Stat_")]
+    [CreateAssetMenu(fileName ="Stat_", menuName = "Stat/new Stat")]
     public class StatTag : ScriptableObject
     {
         [Header("[Name]")]
