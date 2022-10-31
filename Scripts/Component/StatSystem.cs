@@ -88,26 +88,44 @@ namespace KimScor.StatSystem
         }
         
 
-        public Stat GetValue(StatTag Tag)
+        public bool TryGetValue(StatTag Tag, out Stat stat)
         {
             if (!Tag)
             {
-                return null;
+                stat = null;
+
+                return false;
             }
 
-            if (Stats.TryGetValue(Tag, out Stat value))
-                return value;
-
-            return null;
+            return Stats.TryGetValue(Tag, out stat);
         }
+        public bool TryGetValue(string tag, out Stat stat)
+        {
+            if (tag.Equals(null))
+            {
+                stat = null;
+                
+                return false;
+            }
+
+            foreach (Stat containStat in Stats.Values)
+            {
+                if (containStat.StatName == tag)
+                {
+                    stat = containStat;
+
+                    return true;
+                }
+            }
+
+            stat = null;
+
+            return false;
+        }
+
         public Stat SetOrCreateValue(StatTag tag, float value = 0f)
         {
-            if (!tag)
-            {
-                return null;
-            }
-
-            if (Stats.TryGetValue(tag, out Stat stat))
+            if(TryGetValue(tag, out Stat stat))
             {
                 stat.SetBaseValue(value);
 
@@ -124,18 +142,38 @@ namespace KimScor.StatSystem
                 return stat;
             }
         }
-        public Stat GetOrCreateValue(StatTag Tag, float Value = 0f)
-        {
-            if (!Tag)
-            {
-                return null;
-            }
 
-            if (Stats.TryGetValue(Tag, out Stat stat))
+        public Stat SetOrCreateValue(string tag, float value = 0f)
+        {
+            if (TryGetValue(tag, out Stat stat))
+            {
+                stat.SetBaseValue(value);
+
                 return stat;
+            }
             else
             {
-                stat = new Stat(Tag, Value);
+                var newStatTag = Instantiate(new StatTag());
+
+                newStatTag.SetStatTag(tag);
+
+                stat = new Stat(newStatTag, value);
+
+                return stat;
+            }
+        }
+
+        public Stat GetOrCreateValue(StatTag Tag, float value = 0f)
+        {
+            if (TryGetValue(tag, out Stat stat))
+            {
+                stat.SetBaseValue(value);
+
+                return stat;
+            }
+            else
+            {
+                stat = new Stat(Tag, value);
 
                 _Stats.Add(Tag, stat);
 
