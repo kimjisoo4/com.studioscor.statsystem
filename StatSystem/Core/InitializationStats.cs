@@ -1,19 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace KimScor.StatSystem
+namespace StudioScor.StatSystem
 {
-    [System.Serializable]
-    public struct FInitializationStat
-    {
-#if UNITY_EDITOR
-        public string StatName;
-#endif
-        public StatTag StatTag;
-        public float Value;
-    }
 
-    [CreateAssetMenu(fileName = "InitializationStats_", menuName = "Stat/Initialization")]
+    [CreateAssetMenu(fileName = "InitializationStats_", menuName = "StudioScor/Attribute System/new Initialization Stats")]
 	public class InitializationStats : ScriptableObject
     {
         [Header("[Stat]")]
@@ -25,10 +16,10 @@ namespace KimScor.StatSystem
         {
             for(int i = 0; i < Stats.Count; i++)
             {
-                if (_Stats[i].StatTag == null)
+                if (_Stats[i].Tag == null)
                     return;
 
-                _Stats[i].StatName = _Stats[i].StatTag.StatName + " [" + _Stats[i].Value + "]";
+                _Stats[i].HeaderName = _Stats[i].Tag.Name + " [" + _Stats[i].Value + "]";
             }
         }
 #endif

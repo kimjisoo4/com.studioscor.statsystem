@@ -1,4 +1,4 @@
-﻿namespace KimScor.StatSystem
+﻿namespace StudioScor.StatSystem
 {
     public enum EStatModType
 	{

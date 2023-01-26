@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-namespace KimScor.StatSystem
+namespace StudioScor.StatSystem
 {
     public class StatBlockUI : MonoBehaviour
     {
@@ -20,7 +20,7 @@ namespace KimScor.StatSystem
 
             _Stat = stat.Value;
 
-            Name.text = _Stat.StatName;
+            Name.text = _Stat.Name;
             Count.text = Mathf.RoundToInt(_Stat.Value).ToString();
 
             _Stat.OnChangedValue += Stat_OnChangedValue;
@@ -28,7 +28,7 @@ namespace KimScor.StatSystem
 
         private void Stat_OnChangedValue(Stat stat, float currentValue, float prevValue)
         {
-            Name.text = _Stat.StatName;
+            Name.text = _Stat.Name;
             Count.text = Mathf.RoundToInt(_Stat.Value).ToString();
         }
     }

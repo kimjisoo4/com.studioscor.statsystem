@@ -1,6 +1,7 @@
-namespace KimScor.StatSystem
-{
+using System;
 
+namespace StudioScor.StatSystem
+{
     [System.Serializable]
 	public class StatModifier
 	{

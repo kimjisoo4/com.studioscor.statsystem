@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using UnityEditor;
 
 
-namespace KimScor.StatSystem
+namespace StudioScor.StatSystem
 {
 	[System.Serializable]
 	public class Stat : ISerializationCallbackReceiver
@@ -14,26 +14,26 @@ namespace KimScor.StatSystem
 		public delegate void ChangedValue(Stat stat, float currentValue, float prevValue);
 		#endregion
 
-		[Header("[Text]")]
-		[SerializeField] private string _StatName;
+		[Header("[ Stat ]")]
+		[SerializeField] private string _Name;
 		[SerializeField] private string _Description;
 
-		[Header("[Tag]")]
-        [SerializeField] private StatTag _StatTag;
+		[Space(5f)]
+		[SerializeField] private StatTag _Tag; 
 
-		[Header("[Value]")]
+		[Space(5f)]
 		[SerializeField] private float _BaseValue;
-
 		[SerializeField] protected float _PrevValue;
 		[SerializeField] protected float _Value;
 
-		[Header("[Modifier]")]
+		[Space(5f)]
 		[SerializeField] protected List<StatModifier> _StatModifiers;
+
 
 		public event ChangedValue OnChangedValue;
 
-		public StatTag StatTag => _StatTag;
-		public string StatName => _StatName;
+		public StatTag Tag => _Tag;
+		public string Name => _Name;
 		public string Description => _Description;
 		public float BaseValue => _BaseValue;
 		public virtual float Value => _Value;
@@ -43,10 +43,10 @@ namespace KimScor.StatSystem
 
 		public Stat()
 		{
-			_StatName = null;
+			_Name = null;
 			_Description = null;
 
-			_StatTag = null;
+			_Tag = null;
 
 			_BaseValue = 0;
 
@@ -55,16 +55,16 @@ namespace KimScor.StatSystem
 
 			_StatModifiers = new List<StatModifier>();
 		}
-		public Stat(StatTag Tag, float Value)
+		public Stat(StatTag tag, float value)
         {
-			_StatName = Tag.StatName;
-			_Description = Tag.Description;
+			_Name = tag.Name;
+			_Description = tag.Description;
 
-			_StatTag = Tag;
+			_Tag = tag;
 
-			_BaseValue = Value;
+			_BaseValue = value;
 
-			_Value = Value;
+			_Value = value;
 			_PrevValue = 0;
 
 			_StatModifiers = new List<StatModifier>();
@@ -72,15 +72,15 @@ namespace KimScor.StatSystem
 
 		public Stat(Stat stat)
         {
-			SetUp(stat);
+			Setup(stat);
 		}
 
-		public void SetUp(Stat stat)
+		public void Setup(Stat stat)
         {
-			_StatName = stat.StatTag.name;
-			_Description = stat.StatTag.Description;
+			_Name = stat.Tag.name;
+			_Description = stat.Tag.Description;
 
-			_StatTag = stat.StatTag;
+			_Tag = stat.Tag;
 
 			_BaseValue = stat.BaseValue;
 
@@ -89,6 +89,13 @@ namespace KimScor.StatSystem
 
 			_StatModifiers = new List<StatModifier>();
 		}
+
+		public void Remove()
+        {
+			RemoveAllModifier();
+
+			_StatModifiers = null;
+        }
 
 		public void SetBaseValue(float value)
         {
@@ -116,6 +123,16 @@ namespace KimScor.StatSystem
 			return false;
 		}
 
+		public virtual void RemoveAllModifier()
+        {
+			if(_StatModifiers.Count > 0)
+            {
+				_StatModifiers.Clear();
+
+				UpdateValue();
+			}			
+        }
+
 		public virtual bool RemoveAllModifiersFromSource(object source)
 		{
 			int numRemovals = _StatModifiers.RemoveAll(mod => mod.Source == source);
@@ -126,14 +143,15 @@ namespace KimScor.StatSystem
 
 				return true;
 			}
+
 			return false;
 		}
 
-		public virtual float UpdateValue()
+		protected virtual float UpdateValue()
         {
 			_PrevValue = _Value;
 
-			_Value = CalculateFinalValue();
+			_Value = CalculateValue();
 
 
             if (_PrevValue != _Value)
@@ -150,10 +168,10 @@ namespace KimScor.StatSystem
 				return -1;
 			else if (a.Order > b.Order)
 				return 1;
-			return 0; //if (a.Order == b.Order)
+			return 0;
 		}
 		
-		protected virtual float CalculateFinalValue()
+		protected virtual float CalculateValue()
 		{
 			float finalValue = BaseValue;
 			float sumPercentAdd = 0;
@@ -184,7 +202,6 @@ namespace KimScor.StatSystem
 				}
 			}
 
-			// Workaround for float calculation errors, like displaying 12.00001 instead of 12
 			return (float)Math.Round(finalValue, 4);
 		}
 
