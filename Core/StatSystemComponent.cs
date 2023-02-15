@@ -83,6 +83,12 @@ namespace StudioScor.StatSystem
             }
         }
         #endregion
+
+        public bool HasStat(StatTag tag)
+        {
+            return Stats.ContainsKey(tag);
+        }
+
         #region Get Value
 
         public bool TryGetValue(StatTag tag, out Stat stat)
@@ -96,6 +102,10 @@ namespace StudioScor.StatSystem
             }
 
             return Stats.TryGetValue(tag, out stat);
+        }
+        public Stat GetStat(StatTag tag)
+        {
+            return Stats[tag];
         }
         public Stat GetOrCreateValue(StatTag tag, float value = 0f)
         {

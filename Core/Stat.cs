@@ -41,20 +41,6 @@ namespace StudioScor.StatSystem
 
 		public ReadOnlyCollection<StatModifier> StatModifiers;
 
-		public Stat()
-		{
-			_Name = null;
-			_Description = null;
-
-			_Tag = null;
-
-			_BaseValue = 0;
-
-			_Value = 0;
-			_PrevValue = 0;
-
-			_StatModifiers = new List<StatModifier>();
-		}
 		public Stat(StatTag tag, float value)
         {
 			_Name = tag.Name;
@@ -104,16 +90,16 @@ namespace StudioScor.StatSystem
 			UpdateValue();
         }
 
-		public virtual void AddModifier(StatModifier mod)
+		public virtual void AddModifier(StatModifier modifier)
 		{
-			_StatModifiers.Add(mod);
+			_StatModifiers.Add(modifier);
 
 			UpdateValue();
 		}
 
-		public virtual bool RemoveModifier(StatModifier mod)
+		public virtual bool RemoveModifier(StatModifier modifier)
 		{
-			if (_StatModifiers.Remove(mod))
+			if (_StatModifiers.Remove(modifier))
 			{
 				UpdateValue();
 
@@ -165,9 +151,14 @@ namespace StudioScor.StatSystem
 		protected virtual int CompareModifierOrder(StatModifier a, StatModifier b)
 		{
 			if (a.Order < b.Order)
+            {
 				return -1;
+            }
 			else if (a.Order > b.Order)
+            {
 				return 1;
+            }
+
 			return 0;
 		}
 		
@@ -178,25 +169,27 @@ namespace StudioScor.StatSystem
 
 			_StatModifiers.Sort(CompareModifierOrder);
 
+			StatModifier mod;
+
 			for (int i = 0; i < _StatModifiers.Count; i++)
 			{
-				StatModifier mod = _StatModifiers[i];
+				mod = _StatModifiers[i];
 
-				if (mod.Type == EStatModType.Flat)
+				if (mod.Type == EStatModifierType.Absolute)
 				{
 					finalValue += mod.Value;
 				}
-				else if (mod.Type == EStatModType.PercentAdd)
+				else if (mod.Type == EStatModifierType.Percent)
 				{
 					sumPercentAdd += mod.Value;
 
-					if (i + 1 >= _StatModifiers.Count || _StatModifiers[i + 1].Type != EStatModType.PercentAdd)
+					if (i + 1 >= _StatModifiers.Count || _StatModifiers[i + 1].Type != EStatModifierType.Percent)
 					{
 						finalValue *= sumPercentAdd;
 						sumPercentAdd = 0;
 					}
 				}
-				else if (mod.Type == EStatModType.PercentMult)
+				else if (mod.Type == EStatModifierType.PercentResult)
 				{
 					finalValue *= mod.Value;
 				}
