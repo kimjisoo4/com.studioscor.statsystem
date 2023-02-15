@@ -46,7 +46,7 @@ namespace StudioScor.StatSystem.VisualScripting
 			Exit = ControlOutput(nameof(Exit));
 
 			Value = ValueInput<float>(nameof(Value), 0f);
-			Type = ValueInput<EStatModType>(nameof(Type), EStatModType.Flat);
+			Type = ValueInput<EStatModifierType>(nameof(Type), EStatModifierType.Absolute);
 			Order = ValueInput<int>(nameof(Order), 0);
 
 			Modifier = ValueOutput<StatModifier>(nameof(Modifier), CreateStatModifier);
@@ -58,7 +58,7 @@ namespace StudioScor.StatSystem.VisualScripting
 			if (_Modifier is null)
             {
 				var value = flow.GetValue<float>(Value);
-				var type = flow.GetValue<EStatModType>(Type);
+				var type = flow.GetValue<EStatModifierType>(Type);
 				var order = flow.GetValue<int>(Order);
 
 				return new StatModifier(value, type, order);
@@ -72,7 +72,7 @@ namespace StudioScor.StatSystem.VisualScripting
         private ControlOutput GrantModifier(Flow flow)
 		{
 			var value = flow.GetValue<float>(Value);
-			var type = flow.GetValue<EStatModType>(Type);
+			var type = flow.GetValue<EStatModifierType>(Type);
 			var order = flow.GetValue<int>(Order);
 
 			_Modifier = new StatModifier(value, type, order);

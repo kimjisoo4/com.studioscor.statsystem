@@ -62,7 +62,7 @@ namespace StudioScor.StatSystem.VisualScripting
 			StatSystem = ValueInput<StatSystemComponent>(nameof(StatSystem), null).NullMeansSelf();
 			StatTag = ValueInput<StatTag>(nameof(StatTag), null);
 			Value = ValueInput<float>(nameof(Value), 0f);
-			Type = ValueInput<EStatModType>(nameof(Type), EStatModType.Flat);
+			Type = ValueInput<EStatModifierType>(nameof(Type), EStatModifierType.Absolute);
 			Order = ValueInput<int>(nameof(Order), 0);
 			Source = ValueInput<object>(nameof(Source), null).AllowsNull();
 
@@ -74,7 +74,7 @@ namespace StudioScor.StatSystem.VisualScripting
 			var statSystem = flow.GetValue<StatSystemComponent>(StatSystem);
 			var statTag = flow.GetValue<StatTag>(StatTag);
 			var value = flow.GetValue<float>(Value);
-			var type = flow.GetValue<EStatModType>(Type);
+			var type = flow.GetValue<EStatModifierType>(Type);
 			var order = flow.GetValue<int>(Order);
 			var source = flow.GetValue<object>(Source);
 
