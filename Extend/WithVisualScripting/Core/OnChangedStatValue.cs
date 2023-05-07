@@ -2,10 +2,20 @@
 
 namespace StudioScor.StatSystem.VisualScripting
 {
-
-    public class OnChangedStatValue
+	public struct FOnChangedLevel
     {
-		public OnChangedStatValue(Stat stat, float currentValue, float prevValue)
+		public int CurrentLevel;
+		public int PrevLevel;
+
+        public FOnChangedLevel(int currentLevel, int prevLevel)
+        {
+            CurrentLevel = currentLevel;
+            PrevLevel = prevLevel;
+        }
+    }
+    public struct FOnChangedStatValue
+    {
+		public FOnChangedStatValue(Stat stat, float currentValue, float prevValue)
         {
 			Stat = stat;
 			CurrentValue = currentValue;

@@ -63,17 +63,17 @@ namespace StudioScor.StatSystem.Editor
 
                         if (isZero)
                         {
-                            GUILayout.Label(" [ " + baseValue.ToString("F0") + " ]", normal);
+                            GUILayout.Label($" [ {baseValue:F0} ] ", normal);
                         }
                         else
                         {
                             if (isPositive)
                             {
-                                GUILayout.Label(" [ " + baseValue.ToString("F0") + " + " + addValue.ToString("F0") + " ]", plus);
+                                GUILayout.Label($" [ {baseValue:F0} + {addValue:F0} ] ", plus);
                             }
                             else
                             {
-                                GUILayout.Label(" [ " + baseValue.ToString("F0") + " - " + addValue.ToString("F0") + " ]", minus);
+                                GUILayout.Label($" [ {baseValue:F0} - {-addValue:F0}] ", minus);
                             }
                         }
 

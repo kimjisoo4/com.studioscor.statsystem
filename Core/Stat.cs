@@ -1,9 +1,8 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using UnityEditor;
 
+using StudioScor.Utilities;
 
 namespace StudioScor.StatSystem
 {
@@ -27,10 +26,9 @@ namespace StudioScor.StatSystem
 		[SerializeField] protected float _Value;
 
 		[Space(5f)]
-		[SerializeField] protected List<StatModifier> _StatModifiers;
+		[SerializeField] protected readonly List<StatModifier> _StatModifiers;
 
-
-		public event ChangedValue OnChangedValue;
+        public event ChangedValue OnChangedValue;
 
 		public StatTag Tag => _Tag;
 		public string Name => _Name;
@@ -38,8 +36,6 @@ namespace StudioScor.StatSystem
 		public float BaseValue => _BaseValue;
 		public virtual float Value => _Value;
 		public virtual float PrevValue => _PrevValue;
-
-		public ReadOnlyCollection<StatModifier> StatModifiers;
 
 		public Stat(StatTag tag, float value)
         {
@@ -58,11 +54,6 @@ namespace StudioScor.StatSystem
 
 		public Stat(Stat stat)
         {
-			Setup(stat);
-		}
-
-		public void Setup(Stat stat)
-        {
 			_Name = stat.Tag.name;
 			_Description = stat.Tag.Description;
 
@@ -76,11 +67,20 @@ namespace StudioScor.StatSystem
 			_StatModifiers = new List<StatModifier>();
 		}
 
+		public void OnBeforeSerialize()
+		{
+		}
+		public void OnAfterDeserialize()
+		{
+			_Value = BaseValue;
+			_PrevValue = 0;
+		}
+
 		public void Remove()
         {
 			RemoveAllModifier();
 
-			_StatModifiers = null;
+			_StatModifiers.Clear();
         }
 
 		public void SetBaseValue(float value)
@@ -136,17 +136,15 @@ namespace StudioScor.StatSystem
 		protected virtual float UpdateValue()
         {
 			_PrevValue = _Value;
-
 			_Value = CalculateValue();
 
-
             if (_PrevValue != _Value)
-            {
-				OnChangedValue?.Invoke(this, _Value, _PrevValue);
-			}
+				Callback_OnChangedValue();
 
 			return Value;
 		}
+
+		
 
 		protected virtual int CompareModifierOrder(StatModifier a, StatModifier b)
 		{
@@ -164,6 +162,9 @@ namespace StudioScor.StatSystem
 		
 		protected virtual float CalculateValue()
 		{
+			if (_StatModifiers.Count == 0)
+				return BaseValue;
+
 			float finalValue = BaseValue;
 			float sumPercentAdd = 0;
 
@@ -197,16 +198,9 @@ namespace StudioScor.StatSystem
 
 			return (float)Math.Round(finalValue, 4);
 		}
-
-        public void OnBeforeSerialize()
-        {
-
-        }
-
-        public void OnAfterDeserialize()
-        {
-			_Value = BaseValue;
-			_PrevValue = 0;
+		private void Callback_OnChangedValue()
+		{
+			OnChangedValue?.Invoke(this, _Value, _PrevValue);
 		}
-    }
+	}
 }

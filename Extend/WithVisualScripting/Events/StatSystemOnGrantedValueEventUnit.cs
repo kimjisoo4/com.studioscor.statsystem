@@ -7,16 +7,13 @@ namespace StudioScor.StatSystem.VisualScripting
     [UnitTitle("On Granted Stat")]
 	[UnitSubtitle("StatSystem Event")]
 	[UnitCategory("Events\\StudioScor\\StatSystem")]
-	public class StatSystemOnGrantedValueEventUnit : GameObjectEventUnit<Stat>
+	public class StatSystemOnGrantedValueEventUnit : StatEventUnit<Stat>
 	{
-		protected override string hookName => StatSystemWithVisualScripting.STATSYSTEM_ON_GRANTED_STAT;
+		protected override string HookName => StatSystemWithVisualScripting.STATSYSTEM_ON_GRANTED_STAT;
 
 		[DoNotSerialize]
 		[PortLabel("Stat")]
 		public ValueOutput Stat;
-
-		public override Type MessageListenerType => typeof(StatSystemMessageListener);
-
 
 		protected override void Definition()
 		{
