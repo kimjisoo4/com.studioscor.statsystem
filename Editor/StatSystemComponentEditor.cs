@@ -25,6 +25,7 @@ namespace StudioScor.StatSystem.Editor
                 var stats = statSystem.Stats;
 
                 GUIStyle title = new();
+                GUIStyle level = new();
                 GUIStyle plus = new();
                 GUIStyle minus = new();
                 GUIStyle normal = new();
@@ -33,11 +34,15 @@ namespace StudioScor.StatSystem.Editor
                 title.alignment = TextAnchor.MiddleCenter;
                 title.fontStyle = FontStyle.Bold;
 
+                level.normal.textColor = Color.white;
+                level.alignment = TextAnchor.MiddleCenter;
+
                 normal.normal.textColor = Color.white;
                 plus.normal.textColor = Color.green;
                 minus.normal.textColor = Color.red;
 
                 GUILayout.Label("[ Stat ]", title);
+                GUILayout.Label($"Level - {statSystem.Level}", level);
 
                 if (stats is not null)
                 {

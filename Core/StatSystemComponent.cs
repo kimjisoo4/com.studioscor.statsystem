@@ -9,14 +9,14 @@ namespace StudioScor.StatSystem
     public class StatSystemComponent : BaseMonoBehaviour, IStatSystem
     {
         [Header(" [ Stat System Component ] ")]
-        [SerializeField] private int _DefaultLevel = 1;
-        [SerializeField] private StatSet _initializationStats;
+        [SerializeField] private int defaultLevel = 1;
+        [SerializeField] private StatSet initializationStats;
 
-        private readonly Dictionary<StatTag, Stat> _Stats = new();
-        private int _Level;
+        private readonly Dictionary<StatTag, Stat> stats = new();
+        private int level;
 
-        public IReadOnlyDictionary<StatTag, Stat> Stats => _Stats;
-        public int Level => _Level;
+        public IReadOnlyDictionary<StatTag, Stat> Stats => stats;
+        public int Level => level;
 
         public event ChangedLevelEventHandler OnChangedLevel;
         public event StatEventHandler OnGrantedStat;
@@ -25,7 +25,7 @@ namespace StudioScor.StatSystem
         private void OnValidate()
         {
 #if UNITY_EDITOR
-            _Level = _DefaultLevel;
+            level = defaultLevel;
 #endif
         }
         private void Awake()
@@ -35,7 +35,7 @@ namespace StudioScor.StatSystem
 
         protected void SetupStatSystem()
         {
-            SetLevel(_DefaultLevel);
+            SetLevel(defaultLevel);
 
             UpdateStatLevel();
         }
@@ -55,7 +55,7 @@ namespace StudioScor.StatSystem
         {
             Log(" Remove All Stat Modifiers ");
 
-            foreach (var stat in _Stats.Values)
+            foreach (var stat in stats.Values)
             {
                 stat.RemoveAllModifier();
             }
@@ -63,7 +63,7 @@ namespace StudioScor.StatSystem
 
         public void ResetLevel()
         {
-            SetLevel(_DefaultLevel);
+            SetLevel(defaultLevel);
         }
 
         public void SetLevel(int newLevel)
@@ -72,7 +72,7 @@ namespace StudioScor.StatSystem
                 return;
 
             var prevLevel = Level;
-            _Level = newLevel;
+            level = newLevel;
 
             UpdateStatLevel();
 
@@ -81,9 +81,9 @@ namespace StudioScor.StatSystem
 
         protected void UpdateStatLevel()
         {
-            foreach (FStatSet initializationStats in _initializationStats.Stats)
+            foreach (FStatSet initializationStats in initializationStats.Stats)
             {
-                SetOrCreateValue(initializationStats.Tag, initializationStats.Value.Get(_Level));
+                SetOrCreateValue(initializationStats.Tag, initializationStats.Value.Get(level));
             }
         }
 
@@ -119,7 +119,7 @@ namespace StudioScor.StatSystem
 
             var stat = new Stat(tag, value);
 
-            _Stats.Add(tag, stat);
+            stats.Add(tag, stat);
 
             Callback_OnGrantedStat(stat);
 
