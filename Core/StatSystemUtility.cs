@@ -30,6 +30,10 @@ namespace StudioScor.StatSystem
             return component.TryGetComponent(out statSystem);
         }
 
+        public static bool HasStat(this GameObject gameObject, StatTag statTag)
+        {
+            return gameObject.TryGetStatSystem(out IStatSystem statSytstem) && statSytstem.HasStat(statTag);
+        }
         public static bool HasStat(this IStatSystem statSystem, StatTag statTag)
         {
             return statSystem.Stats.ContainsKey(statTag);
@@ -37,6 +41,12 @@ namespace StudioScor.StatSystem
         public static Stat GetStat(this IStatSystem statSystem, StatTag statTag)
         {
             return statSystem.Stats[statTag];
+        }
+        public static bool TryGetStat(this GameObject gameObject, StatTag statTag, out Stat stat)
+        {
+            stat = null;
+
+            return gameObject.TryGetStatSystem(out IStatSystem statSystem) && statSystem.TryGetStat(statTag, out stat);
         }
         public static bool TryGetStat(this IStatSystem statSystem, StatTag statTag, out Stat stat)
         {
