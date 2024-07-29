@@ -9,23 +9,23 @@ namespace StudioScor.StatSystem
     public class StatSystemComponent : BaseMonoBehaviour, IStatSystem
     {
         [Header(" [ Stat System Component ] ")]
-        [SerializeField] private int defaultLevel = 1;
-        [SerializeField] private StatSet initializationStats;
+        [SerializeField] private int _defaultLevel = 1;
+        [SerializeField] private StatSet _initializationStats;
 
-        private readonly Dictionary<StatTag, Stat> stats = new();
-        private int level;
+        private readonly Dictionary<StatTag, Stat> _stats = new();
+        private int _level;
 
-        public IReadOnlyDictionary<StatTag, Stat> Stats => stats;
-        public int Level => level;
+        public IReadOnlyDictionary<StatTag, Stat> Stats => _stats;
+        public int Level => _level;
 
-        public event ChangedLevelEventHandler OnChangedLevel;
-        public event StatEventHandler OnGrantedStat;
-        public event ChangedStatValueHandler OnChangedStatValue;
+        public event IStatSystem.ChangedLevelEventHandler OnChangedLevel;
+        public event IStatSystem.StatEventHandler OnGrantedStat;
+        public event IStatSystem.ChangedStatValueHandler OnChangedStatValue;
 
         private void OnValidate()
         {
 #if UNITY_EDITOR
-            level = defaultLevel;
+            _level = _defaultLevel;
 #endif
         }
         private void Awake()
@@ -35,7 +35,7 @@ namespace StudioScor.StatSystem
 
         protected void SetupStatSystem()
         {
-            SetLevel(defaultLevel);
+            SetLevel(_defaultLevel);
 
             UpdateStatLevel();
         }
@@ -55,7 +55,7 @@ namespace StudioScor.StatSystem
         {
             Log(" Remove All Stat Modifiers ");
 
-            foreach (var stat in stats.Values)
+            foreach (var stat in _stats.Values)
             {
                 stat.RemoveAllModifier();
             }
@@ -63,7 +63,7 @@ namespace StudioScor.StatSystem
 
         public void ResetLevel()
         {
-            SetLevel(defaultLevel);
+            SetLevel(_defaultLevel);
         }
 
         public void SetLevel(int newLevel)
@@ -72,18 +72,18 @@ namespace StudioScor.StatSystem
                 return;
 
             var prevLevel = Level;
-            level = newLevel;
+            _level = newLevel;
 
             UpdateStatLevel();
 
-            Callback_OnChangedLevel(prevLevel);
+            Invoke_OnChangedLevel(prevLevel);
         }
 
         protected void UpdateStatLevel()
         {
-            foreach (FStatSet initializationStats in initializationStats.Stats)
+            foreach (FStatSet initializationStats in _initializationStats.Stats)
             {
-                SetOrCreateValue(initializationStats.Tag, initializationStats.Value.Get(level));
+                SetOrCreateValue(initializationStats.Tag, initializationStats.Value.Get(_level));
             }
         }
 
@@ -119,9 +119,9 @@ namespace StudioScor.StatSystem
 
             var stat = new Stat(tag, value);
 
-            stats.Add(tag, stat);
+            _stats.Add(tag, stat);
 
-            Callback_OnGrantedStat(stat);
+            Invoke_OnGrantedStat(stat);
 
             stat.OnChangedValue += Stat_OnChangedValue;
 
@@ -130,26 +130,26 @@ namespace StudioScor.StatSystem
 
         private void Stat_OnChangedValue(Stat stat, float currentValue, float prevValue)
         {
-            Callback_OnChangedStatValue(stat, currentValue, prevValue);
+            Invoke_OnChangedStatValue(stat, currentValue, prevValue);
         }
 
-        #region CallBack
+        #region Invoke
 
-        protected void Callback_OnChangedLevel(int prevLevel)
+        protected void Invoke_OnChangedLevel(int prevLevel)
         {
-            Log($"On Changed Level - [ CurrentLevel : {Level} | PrevLevle : {prevLevel}]");
+            Log($"{nameof(OnChangedLevel)}  - [ CurrentLevel : {Level} | PrevLevle : {prevLevel}]");
 
             OnChangedLevel?.Invoke(this, Level, prevLevel);
         }
-        protected void Callback_OnGrantedStat(Stat stat)
+        protected void Invoke_OnGrantedStat(Stat stat)
         {
-            Log($" On Granted Stat - [ Stat : {stat.Name} ]");
+            Log($"{nameof(OnGrantedStat)}  - [ Stat : {stat.Name} ]");
 
             OnGrantedStat?.Invoke(this, stat);
         }
-        protected void Callback_OnChangedStatValue(Stat stat,float currentValue, float prevValue)
+        protected void Invoke_OnChangedStatValue(Stat stat,float currentValue, float prevValue)
         {
-            Log($" On Changed Stat Value - [ Stat : {stat.Name} | Current : {currentValue:N2} | Prev : {prevValue:N2} ] ");
+            Log($"{nameof(OnChangedStatValue)} - [ Stat : {stat.Name} | Current : {currentValue:N2} | Prev : {prevValue:N2} ] ");
 
             OnChangedStatValue?.Invoke(this, stat, currentValue, prevValue);
         }

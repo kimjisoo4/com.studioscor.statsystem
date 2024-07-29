@@ -7,21 +7,21 @@ namespace StudioScor.StatSystem
 	public class StatSet : ScriptableObject
     {
         [Header("[ Stat ]")]
-        [SerializeField] private FStatSet[] _Stats;
-        public IReadOnlyCollection<FStatSet> Stats => _Stats;
+        [SerializeField] private FStatSet[] _stats;
+        public IReadOnlyCollection<FStatSet> Stats => _stats;
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
             for(int i = 0; i < Stats.Count; i++)
             {
-                if (_Stats[i].Tag == null)
+                if (_stats[i].Tag == null)
                     return;
 
-                var stat = _Stats[i];
+                var stat = _stats[i];
 
-                _Stats[i].HeaderName = $"{stat.Tag.Name} [ {stat.Value.Min:N2} ~ {stat.Value.Max:N2} ]";
-                _Stats[i].Value.UpdateValue();
+                _stats[i].HeaderName = $"{stat.Tag.Name} [ {stat.Value.Min:N2} ~ {stat.Value.Max:N2} ]";
+                _stats[i].Value.UpdateValue();
             }
         }
 #endif

@@ -2,9 +2,6 @@
 
 namespace StudioScor.StatSystem
 {
-    public delegate void ChangedLevelEventHandler(IStatSystem statSystem, int currentLevel, int prevLevel);
-    public delegate void StatEventHandler(IStatSystem statSystem, Stat stat);
-    public delegate void ChangedStatValueHandler(IStatSystem statSystem, Stat stat, float currentValue, float prevValue);
 
     public static class StatSystemUtility
     {

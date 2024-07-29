@@ -1,12 +1,10 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
-
-using StudioScor.Utilities;
+using UnityEngine;
 
 namespace StudioScor.StatSystem
 {
-	[System.Serializable]
+    [Serializable]
 	public class Stat : ISerializationCallbackReceiver
 	{
 		#region Events
@@ -14,57 +12,57 @@ namespace StudioScor.StatSystem
 		#endregion
 
 		[Header("[ Stat ]")]
-		[SerializeField] private string _Name;
-		[SerializeField] private string _Description;
+		[SerializeField] private string _name;
+		[SerializeField] private string _description;
 
 		[Space(5f)]
-		[SerializeField] private StatTag _Tag; 
+		[SerializeField] private StatTag _statTag; 
 
 		[Space(5f)]
-		[SerializeField] private float _BaseValue;
-		[SerializeField] protected float _PrevValue;
-		[SerializeField] protected float _Value;
+		[SerializeField] private float _baseValue;
+		[SerializeField] protected float _prevValue;
+		[SerializeField] protected float _value;
 
 		[Space(5f)]
-		[SerializeField] protected readonly List<StatModifier> _StatModifiers;
+		[SerializeField] protected readonly List<StatModifier> _statModifiers;
 
         public event ChangedValue OnChangedValue;
 
-		public StatTag Tag => _Tag;
-		public string Name => _Name;
-		public string Description => _Description;
-		public float BaseValue => _BaseValue;
-		public virtual float Value => _Value;
-		public virtual float PrevValue => _PrevValue;
+		public StatTag Tag => _statTag;
+		public string Name => _name;
+		public string Description => _description;
+		public float BaseValue => _baseValue;
+		public virtual float Value => _value;
+		public virtual float PrevValue => _prevValue;
 
 		public Stat(StatTag tag, float value)
         {
-			_Name = tag.Name;
-			_Description = tag.Description;
+			_name = tag.Name;
+			_description = tag.Description;
 
-			_Tag = tag;
+			_statTag = tag;
 
-			_BaseValue = value;
+			_baseValue = value;
 
-			_Value = value;
-			_PrevValue = 0;
+			_value = value;
+			_prevValue = 0;
 
-			_StatModifiers = new List<StatModifier>();
+			_statModifiers = new List<StatModifier>();
 		}
 
 		public Stat(Stat stat)
         {
-			_Name = stat.Tag.name;
-			_Description = stat.Tag.Description;
+			_name = stat.Tag.name;
+			_description = stat.Tag.Description;
 
-			_Tag = stat.Tag;
+			_statTag = stat.Tag;
 
-			_BaseValue = stat.BaseValue;
+			_baseValue = stat.BaseValue;
 
-			_Value = BaseValue;
-			_PrevValue = 0;
+			_value = BaseValue;
+			_prevValue = 0;
 
-			_StatModifiers = new List<StatModifier>();
+			_statModifiers = new List<StatModifier>();
 		}
 
 		public void OnBeforeSerialize()
@@ -72,34 +70,34 @@ namespace StudioScor.StatSystem
 		}
 		public void OnAfterDeserialize()
 		{
-			_Value = BaseValue;
-			_PrevValue = 0;
+			_value = BaseValue;
+			_prevValue = 0;
 		}
 
 		public void Remove()
         {
 			RemoveAllModifier();
 
-			_StatModifiers.Clear();
+			_statModifiers.Clear();
         }
 
 		public void SetBaseValue(float value)
         {
-			_BaseValue = value;
+			_baseValue = value;
 
 			UpdateValue();
         }
 
 		public virtual void AddModifier(StatModifier modifier)
 		{
-			_StatModifiers.Add(modifier);
+			_statModifiers.Add(modifier);
 
 			UpdateValue();
 		}
 
 		public virtual bool RemoveModifier(StatModifier modifier)
 		{
-			if (_StatModifiers.Remove(modifier))
+			if (_statModifiers.Remove(modifier))
 			{
 				UpdateValue();
 
@@ -111,9 +109,9 @@ namespace StudioScor.StatSystem
 
 		public virtual void RemoveAllModifier()
         {
-			if(_StatModifiers.Count > 0)
+			if(_statModifiers.Count > 0)
             {
-				_StatModifiers.Clear();
+				_statModifiers.Clear();
 
 				UpdateValue();
 			}			
@@ -121,7 +119,7 @@ namespace StudioScor.StatSystem
 
 		public virtual bool RemoveAllModifiersFromSource(object source)
 		{
-			int numRemovals = _StatModifiers.RemoveAll(mod => mod.Source == source);
+			int numRemovals = _statModifiers.RemoveAll(mod => mod.Source == source);
 
 			if (numRemovals > 0)
 			{
@@ -135,10 +133,10 @@ namespace StudioScor.StatSystem
 
 		protected virtual float UpdateValue()
         {
-			_PrevValue = _Value;
-			_Value = CalculateValue();
+			_prevValue = _value;
+			_value = CalculateValue();
 
-            if (_PrevValue != _Value)
+            if (_prevValue != _value)
 				Callback_OnChangedValue();
 
 			return Value;
@@ -162,19 +160,19 @@ namespace StudioScor.StatSystem
 		
 		protected virtual float CalculateValue()
 		{
-			if (_StatModifiers.Count == 0)
+			if (_statModifiers.Count == 0)
 				return BaseValue;
 
 			float finalValue = BaseValue;
 			float sumPercentAdd = 0;
 
-			_StatModifiers.Sort(CompareModifierOrder);
+			_statModifiers.Sort(CompareModifierOrder);
 
 			StatModifier mod;
 
-			for (int i = 0; i < _StatModifiers.Count; i++)
+			for (int i = 0; i < _statModifiers.Count; i++)
 			{
-				mod = _StatModifiers[i];
+				mod = _statModifiers[i];
 
 				if (mod.Type == EStatModifierType.Absolute)
 				{
@@ -184,7 +182,7 @@ namespace StudioScor.StatSystem
 				{
 					sumPercentAdd += mod.Value;
 
-					if (i + 1 >= _StatModifiers.Count || _StatModifiers[i + 1].Type != EStatModifierType.Percent)
+					if (i + 1 >= _statModifiers.Count || _statModifiers[i + 1].Type != EStatModifierType.Percent)
 					{
 						finalValue *= sumPercentAdd;
 						sumPercentAdd = 0;
@@ -200,7 +198,7 @@ namespace StudioScor.StatSystem
 		}
 		private void Callback_OnChangedValue()
 		{
-			OnChangedValue?.Invoke(this, _Value, _PrevValue);
+			OnChangedValue?.Invoke(this, _value, _prevValue);
 		}
 	}
 }

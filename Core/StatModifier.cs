@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace StudioScor.StatSystem
 {
-    [System.Serializable]
+    [Serializable]
 	public class StatModifier
 	{
         [Header(" [ Stat Modifier ] ")]

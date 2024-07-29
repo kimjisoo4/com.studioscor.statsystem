@@ -6,17 +6,17 @@ namespace StudioScor.StatSystem
     public class StatTag : ScriptableObject
     {
         [Header(" [ Name ] ")]
-        [SerializeField] private string statName;
+        [SerializeField] private string _statName;
         [Header(" [ Text ] ")]
-        [SerializeField] private string description;
+        [SerializeField] private string _description;
 
-        public string Name => statName;
-        public string Description => description;
+        public string Name => _statName;
+        public string Description => _description;
 
         public void SetStatTag(string newName, string newDescription = null)
         {
-            statName = newName;
-            description = newDescription;
+            _statName = newName;
+            _description = newDescription;
         }
     }
 }
