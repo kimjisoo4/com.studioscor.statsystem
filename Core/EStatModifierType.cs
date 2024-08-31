@@ -1,9 +1,10 @@
 ﻿namespace StudioScor.StatSystem
 {
+
     public enum EStatModifierType
 	{
-		Absolute = 100,
-		Percent = 200,
-		PercentResult = 300,
+		Add = 100,
+		AddMultiply = 200,
+		Multiply = 300,
 	}
 }

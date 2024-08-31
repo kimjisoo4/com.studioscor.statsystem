@@ -90,7 +90,22 @@ namespace StudioScor.StatSystem
 
 		public virtual void AddModifier(StatModifier modifier)
 		{
-			_statModifiers.Add(modifier);
+			if (_statModifiers.Count != 0)
+			{
+				for(int i = 0; i < _statModifiers.Count; i++)
+				{
+					var statModifier = _statModifiers[i];
+
+					if(statModifier.Order > modifier.Order)
+					{
+						_statModifiers.Insert(i, modifier);
+					}
+				}
+			}
+			else
+			{
+                _statModifiers.Add(modifier);
+            }
 
 			UpdateValue();
 		}
@@ -166,7 +181,7 @@ namespace StudioScor.StatSystem
 			float finalValue = BaseValue;
 			float sumPercentAdd = 0;
 
-			_statModifiers.Sort(CompareModifierOrder);
+			//_statModifiers.Sort(CompareModifierOrder);
 
 			StatModifier mod;
 
@@ -174,21 +189,21 @@ namespace StudioScor.StatSystem
 			{
 				mod = _statModifiers[i];
 
-				if (mod.Type == EStatModifierType.Absolute)
+				if (mod.Type == EStatModifierType.Add)
 				{
 					finalValue += mod.Value;
 				}
-				else if (mod.Type == EStatModifierType.Percent)
+				else if (mod.Type == EStatModifierType.AddMultiply)
 				{
 					sumPercentAdd += mod.Value;
 
-					if (i + 1 >= _statModifiers.Count || _statModifiers[i + 1].Type != EStatModifierType.Percent)
+					if (i + 1 >= _statModifiers.Count || _statModifiers[i + 1].Type != EStatModifierType.AddMultiply)
 					{
-						finalValue *= sumPercentAdd;
+						finalValue += finalValue * sumPercentAdd;
 						sumPercentAdd = 0;
 					}
 				}
-				else if (mod.Type == EStatModifierType.PercentResult)
+				else if (mod.Type == EStatModifierType.Multiply)
 				{
 					finalValue *= mod.Value;
 				}

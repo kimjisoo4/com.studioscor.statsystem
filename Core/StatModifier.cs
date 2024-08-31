@@ -8,13 +8,13 @@ namespace StudioScor.StatSystem
 	{
         [Header(" [ Stat Modifier ] ")]
 		[SerializeField] private float _value = 0f;
-		[SerializeField] private EStatModifierType _type = EStatModifierType.Absolute;
+		[SerializeField] private EStatModifierType _type = EStatModifierType.Add;
 		[SerializeField] private int _order = 0;
 		[SerializeField] private object _source = null;
 
 		public float Value => _value;
 		public EStatModifierType Type => _type;
-		public int Order => (int)Type + _order;
+		public int Order => _order;
 		public object Source => _source;
 
 		public StatModifier()
@@ -39,5 +39,9 @@ namespace StudioScor.StatSystem
             _order = order;
             _source = source;
         }
+		public void SetSource(object newSource)
+		{
+			_source = newSource;
+		}
 	}
 }
