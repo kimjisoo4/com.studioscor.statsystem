@@ -13,7 +13,6 @@ namespace StudioScor.StatSystem.VisualScripting
         {
             var statSystem = transform.GetStatSystem();
 
-            statSystem.OnChangedLevel += StatSystem_OnChangedLevel;
             statSystem.OnChangedStatValue += StatSystem_OnChangedStatValue;
             statSystem.OnGrantedStat += StatSystem_OnGrantedStat;
         }
@@ -21,18 +20,11 @@ namespace StudioScor.StatSystem.VisualScripting
         {
             if (transform.TryGetStatSystem(out IStatSystem statSystem))
             {
-                statSystem.OnChangedLevel -= StatSystem_OnChangedLevel;
                 statSystem.OnChangedStatValue -= StatSystem_OnChangedStatValue;
                 statSystem.OnGrantedStat += StatSystem_OnGrantedStat;
             }
         }
 
-        private void StatSystem_OnChangedLevel(IStatSystem statSystem, int currentLevel, int prevLevel)
-        {
-            var onChangedLevel = new FOnChangedLevel(currentLevel, prevLevel);
-
-            EventBus.Trigger(new EventHook(StatSystemWithVisualScripting.STATSYSTEM_ON_CHANGED_LEVEL, statSystem), onChangedLevel);
-        }
         private void StatSystem_OnGrantedStat(IStatSystem statSystem, Stat stat)
         {
             EventBus.Trigger(new EventHook(StatSystemWithVisualScripting.STATSYSTEM_ON_GRANTED_STAT, statSystem), stat);

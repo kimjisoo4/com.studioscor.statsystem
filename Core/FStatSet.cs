@@ -9,7 +9,10 @@ namespace StudioScor.StatSystem
 #if UNITY_EDITOR
         [SReadOnly] public string HeaderName;
 #endif
-        public StatTag Tag;
-        public LevelFloatValue Value;
+        [SerializeField] private StatTag _tag;
+        [SerializeField] private float _value;
+
+        public readonly StatTag Tag => _tag;
+        public readonly float Value => _value;
     }
 }

@@ -49,14 +49,5 @@ namespace StudioScor.StatSystem
         {
             return statSystem.Stats.TryGetValue(statTag, out stat);
         }
-
-        public static void AddLevel(this IStatSystem statSystem, int addLevel = 1)
-        {
-            statSystem.SetLevel(statSystem.Level + addLevel);
-        }
-        public static void SubLevel(this IStatSystem statSystem, int subLevel = 1)
-        {
-            statSystem.SetLevel(statSystem.Level - subLevel);
-        }
     }
 }

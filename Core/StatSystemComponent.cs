@@ -9,25 +9,14 @@ namespace StudioScor.StatSystem
     public class StatSystemComponent : BaseMonoBehaviour, IStatSystem
     {
         [Header(" [ Stat System Component ] ")]
-        [SerializeField] private int _defaultLevel = 1;
         [SerializeField] private StatSet _initializationStats;
 
         private readonly Dictionary<StatTag, Stat> _stats = new();
-        private int _level;
-
         public IReadOnlyDictionary<StatTag, Stat> Stats => _stats;
-        public int Level => _level;
 
-        public event IStatSystem.ChangedLevelEventHandler OnChangedLevel;
         public event IStatSystem.StatEventHandler OnGrantedStat;
         public event IStatSystem.ChangedStatValueHandler OnChangedStatValue;
 
-        private void OnValidate()
-        {
-#if UNITY_EDITOR
-            _level = _defaultLevel;
-#endif
-        }
         private void Awake()
         {
             SetupStatSystem();
@@ -35,15 +24,17 @@ namespace StudioScor.StatSystem
 
         protected void SetupStatSystem()
         {
-            SetLevel(_defaultLevel);
-
-            UpdateStatLevel();
+            if(_initializationStats)
+            {
+                foreach (FStatSet initializationStats in _initializationStats.Stats)
+                {
+                    SetOrCreateValue(initializationStats.Tag, initializationStats.Value);
+                }
+            }
         }
         public void ResetStatSystem()
         {
             RemoveAllStatModifier();
-
-            ResetLevel();
 
             OnReset();
         }
@@ -58,32 +49,6 @@ namespace StudioScor.StatSystem
             foreach (var stat in _stats.Values)
             {
                 stat.RemoveAllModifier();
-            }
-        }
-
-        public void ResetLevel()
-        {
-            SetLevel(_defaultLevel);
-        }
-
-        public void SetLevel(int newLevel)
-        {
-            if (Level == newLevel)
-                return;
-
-            var prevLevel = Level;
-            _level = newLevel;
-
-            UpdateStatLevel();
-
-            Invoke_OnChangedLevel(prevLevel);
-        }
-
-        protected void UpdateStatLevel()
-        {
-            foreach (FStatSet initializationStats in _initializationStats.Stats)
-            {
-                SetOrCreateValue(initializationStats.Tag, initializationStats.Value.Get(_level));
             }
         }
 
@@ -102,7 +67,7 @@ namespace StudioScor.StatSystem
         {
             if(Stats.TryGetValue(tag, out Stat stat))
             {
-                Log(" Set Value ");
+                Log($"Set Value - {tag.Name} :: {value:N2}");
 
                 stat.SetBaseValue(value);
 
@@ -115,7 +80,7 @@ namespace StudioScor.StatSystem
         }
         public Stat CreateStat(StatTag tag, float value = 0f)
         {
-            Log(" Create Value ");
+            Log($"{nameof(CreateStat)} - {tag.Name} :: {value:N2}");
 
             var stat = new Stat(tag, value);
 
@@ -135,12 +100,6 @@ namespace StudioScor.StatSystem
 
         #region Invoke
 
-        protected void Invoke_OnChangedLevel(int prevLevel)
-        {
-            Log($"{nameof(OnChangedLevel)}  - [ CurrentLevel : {Level} | PrevLevle : {prevLevel}]");
-
-            OnChangedLevel?.Invoke(this, Level, prevLevel);
-        }
         protected void Invoke_OnGrantedStat(Stat stat)
         {
             Log($"{nameof(OnGrantedStat)}  - [ Stat : {stat.Name} ]");

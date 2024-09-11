@@ -6,7 +6,6 @@ namespace StudioScor.StatSystem.VisualScripting
     {
 		public const string STATSYSTEM_ON_GRANTED_STAT = "StatSystem_OnGrantedStat";
 		public const string STATSYSTEM_ON_CHANGED_STAT_VALUE = "StatSystem_OnChangedStatValue";
-        public const string STATSYSTEM_ON_CHANGED_LEVEL = "StatSystem_OnChangedLevel";
     }
 }
 

@@ -42,7 +42,6 @@ namespace StudioScor.StatSystem.Editor
                 minus.normal.textColor = Color.red;
 
                 GUILayout.Label("[ Stat ]", title);
-                GUILayout.Label($"Level - {statSystem.Level}", level);
 
                 if (stats is not null)
                 {
