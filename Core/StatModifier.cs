@@ -4,6 +4,9 @@ using UnityEngine;
 namespace StudioScor.StatSystem
 {
     [Serializable]
+#if SCOR_ENABLE_VISUALSCRIPTING
+	[Unity.VisualScripting.IncludeInSettings(true)]
+#endif
 	public class StatModifier
 	{
         [Header(" [ Stat Modifier ] ")]

@@ -2,7 +2,8 @@
     "name": "StudioScor.StatSystem",
     "rootNamespace": "StudioScor.StatSystem",
     "references": [
-        "GUID:0e56af4e027762c43b7508efc3b00495"
+        "GUID:0e56af4e027762c43b7508efc3b00495",
+        "GUID:21b0c8d1703a94250bfac916590cea4f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -11,6 +12,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.visualscripting",
+            "expression": "0.0.0",
+            "define": "SCOR_ENABLE_VISUALSCRIPTING"
+        }
+    ],
     "noEngineReferences": false
 }

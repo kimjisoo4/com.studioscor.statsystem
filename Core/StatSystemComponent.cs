@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Linq;
+﻿using StudioScor.Utilities;
 using System.Collections.Generic;
-using StudioScor.Utilities;
+using UnityEngine;
 
 namespace StudioScor.StatSystem
 {
@@ -48,7 +47,7 @@ namespace StudioScor.StatSystem
 
             foreach (var stat in _stats.Values)
             {
-                stat.RemoveAllModifier();
+                stat.RemoveAllModifiers();
             }
         }
 

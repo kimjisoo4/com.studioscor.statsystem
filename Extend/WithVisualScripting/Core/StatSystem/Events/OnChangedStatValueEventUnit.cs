@@ -3,12 +3,9 @@ using Unity.VisualScripting;
 
 namespace StudioScor.StatSystem.VisualScripting
 {
-
-
     [UnitTitle("On Changed Stat Value")]
     [UnitSubtitle("StatSystem Event")]
-    [UnitCategory("Events\\StudioScor\\StatSystem")]
-    public class OnChangedStatValueEventUnit : StatEventUnit<FOnChangedStatValue>
+    public class OnChangedStatValueEventUnit : StatSystemEventUnit<FOnChangedStatValue>
     {
         protected override string HookName => StatSystemWithVisualScripting.STATSYSTEM_ON_CHANGED_STAT_VALUE;
 

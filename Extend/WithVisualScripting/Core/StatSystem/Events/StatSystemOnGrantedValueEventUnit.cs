@@ -6,8 +6,7 @@ namespace StudioScor.StatSystem.VisualScripting
 {
     [UnitTitle("On Granted Stat")]
 	[UnitSubtitle("StatSystem Event")]
-	[UnitCategory("Events\\StudioScor\\StatSystem")]
-	public class StatSystemOnGrantedValueEventUnit : StatEventUnit<Stat>
+	public class StatSystemOnGrantedValueEventUnit : StatSystemEventUnit<Stat>
 	{
 		protected override string HookName => StatSystemWithVisualScripting.STATSYSTEM_ON_GRANTED_STAT;
 

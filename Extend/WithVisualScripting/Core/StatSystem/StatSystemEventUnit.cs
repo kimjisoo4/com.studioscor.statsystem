@@ -5,7 +5,9 @@ using Unity.VisualScripting;
 
 namespace StudioScor.StatSystem.VisualScripting
 {
-    public abstract class StatEventUnit<T> : CustomInterfaceEventUnit<IStatSystem,T>
+
+    [UnitCategory("Events\\StudioScor\\StatSystem")]
+    public abstract class StatSystemEventUnit<T> : CustomInterfaceEventUnit<IStatSystem,T>
     {
         public override Type MessageListenerType => typeof(StatSystemMessageListener);
     }

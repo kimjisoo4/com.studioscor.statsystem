@@ -1,6 +1,5 @@
 ﻿namespace StudioScor.StatSystem
 {
-
     public enum EStatModifierType
 	{
 		Add = 100,

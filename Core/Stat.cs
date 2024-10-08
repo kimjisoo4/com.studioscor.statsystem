@@ -5,7 +5,10 @@ using UnityEngine;
 namespace StudioScor.StatSystem
 {
     [Serializable]
-	public class Stat : ISerializationCallbackReceiver
+#if SCOR_ENABLE_VISUALSCRIPTING
+    [Unity.VisualScripting.IncludeInSettings(true)]
+#endif
+    public class Stat : ISerializationCallbackReceiver
 	{
 		#region Events
 		public delegate void ChangedValue(Stat stat, float currentValue, float prevValue);
@@ -76,7 +79,7 @@ namespace StudioScor.StatSystem
 
 		public void Remove()
         {
-			RemoveAllModifier();
+			RemoveAllModifiers();
 
 			_statModifiers.Clear();
         }
@@ -132,7 +135,7 @@ namespace StudioScor.StatSystem
 			return false;
 		}
 
-		public virtual void RemoveAllModifier()
+		public virtual void RemoveAllModifiers()
         {
 			if(_statModifiers.Count > 0)
             {
