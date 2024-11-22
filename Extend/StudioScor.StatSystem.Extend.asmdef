@@ -11,7 +11,9 @@
         "GUID:54cb1906aeb4e4264bc1d2aa3818a43f",
         "GUID:23f3c6063e13e4fd9addce3606ff4e42",
         "GUID:f10496e9d78b943308af5e7e9e4543c8",
-        "GUID:0caab94c8c0a20b4e83e8dc1e4b2a416"
+        "GUID:0caab94c8c0a20b4e83e8dc1e4b2a416",
+        "GUID:753ebc295a2f30b4b87da5984eda45c2",
+        "GUID:73907d139b13f8a43b7e3e95c329d30a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -30,6 +32,11 @@
             "name": "com.alexeytaranov.serializereferencedropdown",
             "expression": "0.0.0",
             "define": "SCOR_ENABLE_SERIALIZEREFERENCE"
+        },
+        {
+            "name": "com.unity.behavior",
+            "expression": "1.0.3",
+            "define": "SCOR_ENABLE_BEHAVIOR"
         }
     ],
     "noEngineReferences": false
