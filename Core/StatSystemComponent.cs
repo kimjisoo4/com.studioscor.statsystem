@@ -66,7 +66,7 @@ namespace StudioScor.StatSystem
         {
             if(Stats.TryGetValue(tag, out Stat stat))
             {
-                Log($"Set Value - {tag.Name} :: {value:N2}");
+                Log($"{nameof(SetOrCreateValue)} -  Stat Tag : {tag} || Value : {value:N2}");
 
                 stat.SetBaseValue(value);
 
@@ -79,7 +79,7 @@ namespace StudioScor.StatSystem
         }
         public Stat CreateStat(StatTag tag, float value = 0f)
         {
-            Log($"{nameof(CreateStat)} - {tag.Name} :: {value:N2}");
+            Log($"{nameof(CreateStat)} -  Stat Tag : {tag} || Value : {value:N2}");
 
             var stat = new Stat(tag, value);
 
@@ -101,13 +101,13 @@ namespace StudioScor.StatSystem
 
         protected void Invoke_OnGrantedStat(Stat stat)
         {
-            Log($"{nameof(OnGrantedStat)}  - [ Stat : {stat.Name} ]");
+            Log($"{nameof(OnGrantedStat)}  - [ Stat : {stat.Tag} ]");
 
             OnGrantedStat?.Invoke(this, stat);
         }
         protected void Invoke_OnChangedStatValue(Stat stat,float currentValue, float prevValue)
         {
-            Log($"{nameof(OnChangedStatValue)} - [ Stat : {stat.Name} | Current : {currentValue:N2} | Prev : {prevValue:N2} ] ");
+            Log($"{nameof(OnChangedStatValue)} - [ Stat : {stat.Tag} | Current : {currentValue:N2} | Prev : {prevValue:N2} ] ");
 
             OnChangedStatValue?.Invoke(this, stat, currentValue, prevValue);
         }

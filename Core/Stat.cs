@@ -32,17 +32,12 @@ namespace StudioScor.StatSystem
         public event ChangedValue OnChangedValue;
 
 		public StatTag Tag => _statTag;
-		public string Name => _name;
-		public string Description => _description;
 		public float BaseValue => _baseValue;
 		public virtual float Value => _value;
 		public virtual float PrevValue => _prevValue;
 
 		public Stat(StatTag tag, float value)
         {
-			_name = tag.Name;
-			_description = tag.Description;
-
 			_statTag = tag;
 
 			_baseValue = value;
@@ -55,9 +50,6 @@ namespace StudioScor.StatSystem
 
 		public Stat(Stat stat)
         {
-			_name = stat.Tag.name;
-			_description = stat.Tag.Description;
-
 			_statTag = stat.Tag;
 
 			_baseValue = stat.BaseValue;

@@ -61,7 +61,7 @@ namespace StudioScor.StatSystem.Editor
                         isPositive = addValue.IsPositive();
 
                         GUILayout.BeginHorizontal();
-                        GUILayout.Label(stat.Key.Name, normal);
+                        GUILayout.Label(stat.Key.name, normal);
                         GUILayout.FlexibleSpace();
                         GUILayout.Label(currentValue.ToString("F0"), normal);
 

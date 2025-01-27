@@ -20,7 +20,7 @@ namespace StudioScor.StatSystem
 
                 var stat = _stats[i];
 
-                _stats[i].HeaderName = $"{stat.Tag.Name} [ {stat.Value:N2} ]";
+                _stats[i].HeaderName = $"{stat.Tag} [ {stat.Value:N2} ]";
             }
         }
 #endif
