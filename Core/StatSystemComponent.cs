@@ -1,5 +1,6 @@
 ﻿using StudioScor.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace StudioScor.StatSystem
@@ -10,18 +11,29 @@ namespace StudioScor.StatSystem
         [Header(" [ Stat System Component ] ")]
         [SerializeField] private StatSet _initializationStats;
 
+        private bool _wasInit = false;
         private readonly Dictionary<StatTag, Stat> _stats = new();
         public IReadOnlyDictionary<StatTag, Stat> Stats => _stats;
 
         public event IStatSystem.StatEventHandler OnGrantedStat;
         public event IStatSystem.ChangedStatValueHandler OnChangedStatValue;
 
-        private void Awake()
+        private void OnDestroy()
         {
-            SetupStatSystem();
+            Dispose();
         }
 
-        protected void SetupStatSystem()
+        public void Initialization()
+        {
+            if (_wasInit)
+                return;
+
+            _wasInit = true;
+
+            OnInit();
+        }
+
+        protected virtual void OnInit()
         {
             if(_initializationStats)
             {
@@ -31,14 +43,25 @@ namespace StudioScor.StatSystem
                 }
             }
         }
-        public void ResetStatSystem()
+        public void Dispose()
         {
-            RemoveAllStatModifier();
+            if (!_wasInit)
+                return;
 
-            OnReset();
+            _wasInit = false;
+
+            OnGrantedStat = null;
+            OnChangedStatValue = null;
+
+            for (int i = 0; i < Stats.Count; i++)
+            {
+                var stat = Stats.Values.ElementAt(i);
+
+                stat.Dispose();
+            }
+
+            _stats.Clear();
         }
-        protected virtual void OnSetup() { }
-        protected virtual void OnReset() { }
 
 
         public void RemoveAllStatModifier()
@@ -98,7 +121,6 @@ namespace StudioScor.StatSystem
         }
 
         #region Invoke
-
         protected void Invoke_OnGrantedStat(Stat stat)
         {
             Log($"{nameof(OnGrantedStat)}  - [ Stat : {stat.Tag} ]");
@@ -111,7 +133,6 @@ namespace StudioScor.StatSystem
 
             OnChangedStatValue?.Invoke(this, stat, currentValue, prevValue);
         }
-
         #endregion
     }
 }

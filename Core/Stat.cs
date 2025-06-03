@@ -1,3 +1,4 @@
+using StudioScor.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,11 +70,11 @@ namespace StudioScor.StatSystem
 			_prevValue = 0;
 		}
 
-		public void Remove()
+		public void Dispose()
         {
-			RemoveAllModifiers();
+			OnChangedValue = null;
 
-			_statModifiers.Clear();
+			RemoveAllModifiers();
         }
 
 		public void SetBaseValue(float value)
@@ -129,26 +130,32 @@ namespace StudioScor.StatSystem
 
 		public virtual void RemoveAllModifiers()
         {
-			if(_statModifiers.Count > 0)
-            {
-				_statModifiers.Clear();
+			_statModifiers.Clear();
 
-				UpdateValue();
-			}			
+			UpdateValue();
         }
 
 		public virtual bool RemoveAllModifiersFromSource(object source)
 		{
-			int numRemovals = _statModifiers.RemoveAll(mod => mod.Source == source);
+			bool flag = false;
 
-			if (numRemovals > 0)
+			for(int i = _statModifiers.LastIndex(); i > 0; i--)
 			{
-				UpdateValue();
+				var modifier = _statModifiers[i];
 
-				return true;
+				if (modifier.Source == source)
+				{
+					flag = true;
+
+					RemoveModifier(modifier);
+
+                }
 			}
 
-			return false;
+			if(flag)
+				UpdateValue();
+
+			return flag;
 		}
 
 		protected virtual float UpdateValue()
@@ -157,7 +164,7 @@ namespace StudioScor.StatSystem
 			_value = CalculateValue();
 
             if (_prevValue != _value)
-				Callback_OnChangedValue();
+				Invoke_OnChangedValue();
 
 			return Value;
 		}
@@ -185,8 +192,6 @@ namespace StudioScor.StatSystem
 
 			float finalValue = BaseValue;
 			float sumPercentAdd = 0;
-
-			//_statModifiers.Sort(CompareModifierOrder);
 
 			StatModifier mod;
 
@@ -216,7 +221,8 @@ namespace StudioScor.StatSystem
 
 			return (float)Math.Round(finalValue, 4);
 		}
-		private void Callback_OnChangedValue()
+
+		private void Invoke_OnChangedValue()
 		{
 			OnChangedValue?.Invoke(this, _value, _prevValue);
 		}

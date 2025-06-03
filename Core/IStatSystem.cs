@@ -12,6 +12,8 @@ namespace StudioScor.StatSystem
         public GameObject gameObject { get; }
         public IReadOnlyDictionary<StatTag, Stat> Stats { get; }
 
+        public void Initialization();
+        public void Dispose();
         public void RemoveAllStatModifier();
         public Stat GetOrCreateValue(StatTag tag, float value = 0f);
         public Stat SetOrCreateValue(StatTag tag, float value = 0f);
