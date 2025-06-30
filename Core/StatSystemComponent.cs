@@ -23,6 +23,11 @@ namespace StudioScor.StatSystem
             Dispose();
         }
 
+        private void Awake()
+        {
+            Initialization();
+        }
+
         public void Initialization()
         {
             if (_wasInit)
