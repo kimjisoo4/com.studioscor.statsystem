@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using StudioScor.Utilities;
 
 namespace StudioScor.StatSystem
 {
@@ -7,7 +6,7 @@ namespace StudioScor.StatSystem
     public struct FStatSet
     {
 #if UNITY_EDITOR
-        [SReadOnly] public string HeaderName;
+        public string HeaderName;
 #endif
         [SerializeField] private StatTag _tag;
         [SerializeField] private float _value;

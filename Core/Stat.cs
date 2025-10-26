@@ -9,7 +9,7 @@ namespace StudioScor.StatSystem
 #if SCOR_ENABLE_VISUALSCRIPTING
     [Unity.VisualScripting.IncludeInSettings(true)]
 #endif
-    public class Stat : ISerializationCallbackReceiver
+    public class Stat
 	{
 		#region Events
 		public delegate void ChangedValue(Stat stat, float currentValue, float prevValue);
@@ -59,15 +59,6 @@ namespace StudioScor.StatSystem
 			_prevValue = 0;
 
 			_statModifiers = new List<StatModifier>();
-		}
-
-		public void OnBeforeSerialize()
-		{
-		}
-		public void OnAfterDeserialize()
-		{
-			_value = BaseValue;
-			_prevValue = 0;
 		}
 
 		public void Dispose()
